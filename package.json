@@ -2,19 +2,26 @@
   "name": "souq-el-gom3a",
   "version": "1.0.0",
   "main": "index.js",
+  "type": "module",
   "scripts": {
     "start": "node backend/server",
     "server": "nodemon backend/server",
     "client": "cd frontend && yarn start",
-    "dev": "concurrently \"yarn server\" \"yarn client\" "
+    "dev": "concurrently \"yarn server\" \"yarn client\" ",
+    "data:import": "node backend/seeder",
+    "data:destroy": "node backend/seeder -d"
   },
   "repository": "https://github.com/Afret22/souq-el-gom3a.git",
   "author": "afret",
   "license": "MIT",
   "private": null,
   "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "colors": "^1.4.0",
     "dotenv": "^8.2.0",
-    "express": "^4.17.1"
+    "express": "^4.17.1",
+    "express-async-handler": "^1.1.4",
+    "mongoose": "^5.10.14"
   },
   "devDependencies": {
     "concurrently": "^5.3.0",
