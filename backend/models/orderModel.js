@@ -33,7 +33,7 @@ const orderSchema = mongoose.Schema(
     paymentResult: {
       id: { type: String },
       status: { type: String },
-      email_addresss: { type: String },
+      email_address: { type: String },
       update_time: { type: String },
     },
     taxPrice: {
@@ -59,12 +59,12 @@ const orderSchema = mongoose.Schema(
     paidAt: {
       type: Date,
     },
-    isDeliverd: {
+    isDelivered: {
       type: Boolean,
       required: true,
       default: false,
     },
-    deliverdAT: {
+    deliveredAt: {
       type: Date,
     },
   },

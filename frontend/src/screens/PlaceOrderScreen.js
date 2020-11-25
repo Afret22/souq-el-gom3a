@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import Message from "../components/Message";
 import CheckoutSteps from "../components/CheckoutSteps";
 import { createOrder } from "../actions/orderAction";
+import { ClearCart } from "../actions/cartActions";
 
 const PlaceOrderScreen = ({ history }) => {
   const dispatch = useDispatch();
@@ -28,14 +29,15 @@ const PlaceOrderScreen = ({ history }) => {
   ).toFixed(2);
 
   const orderCreate = useSelector((state) => state.orderCreate);
-  const { order, success, error } = orderCreate;
+  const [success,setSuccess] = useState(false);
+  const { order, error ,success:orderCreated} = orderCreate;
 
   useEffect(() => {
-    if (success) {
+    if (success && orderCreated) {
       history.push(`order/${order._id}`);
     }
     //eslint-disable-line
-  }, [history, success]);
+  }, [history, success,orderCreated]);
 
   const placeOrderHandler = () => {
     dispatch(
@@ -49,6 +51,8 @@ const PlaceOrderScreen = ({ history }) => {
         totalPrice: cart.totalPrice,
       })
     );
+    setSuccess(true);
+    dispatch(ClearCart())
   };
 
   return (

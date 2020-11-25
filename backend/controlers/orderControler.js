@@ -1,5 +1,6 @@
 import asyncHandler from "express-async-handler";
 import Order from "../models/orderModel.js";
+import mongoose from "mongoose";
 
 // @desc    Create new order
 // @route   POST /api/orders
@@ -67,7 +68,7 @@ const updateOrderTopaid = asyncHandler(async (req, res) => {
       id: req.body.id,
       status: req.body.status,
       update_time: req.body.update_time,
-      email_address: req.user.email_address,
+      email_address: req.body.payer.email_address,
     };
     const updatedOrder = await order.save();
 
@@ -78,4 +79,55 @@ const updateOrderTopaid = asyncHandler(async (req, res) => {
   }
 });
 
-export { addOrderItems, getOrderById, updateOrderTopaid };
+// @desc    GET logged in user oreders
+// @route   GET /api/orders/myorders
+// @access  Private
+
+const getMyOrders = asyncHandler(async (req, res) => {
+  console.log(req.user._id);
+  if (mongoose.Types.ObjectId.isValid(req.user._id)) {
+    const orders = await Order.find({ user: req.user._id });
+    res.json(orders);
+  }
+  res.status(404);
+  throw new Error("fk");
+});
+
+// @desc    GET all oreders
+// @route   GET /api/orders
+// @access  Private/Admin
+
+const getOrders = asyncHandler(async (req, res) => {
+  const orders = await Order.find({}).populate("user", "id name");
+  res.json(orders);
+});
+
+// @desc    Update order to deilverd
+// @route   PUT /api/orders/:id/deliver
+// @access  Private/Admin
+
+const updateOrderToDelivered = asyncHandler(async (req, res) => {
+  const order = await Order.findById(req.params.id);
+
+  if (order) {
+    order.isDelivered = true;
+    order.deliveredAt = Date.now();
+    console.log(order)
+
+    const updatedOrder = await order.save();
+
+    res.json(updatedOrder);
+  } else {
+    res.status(404);
+    throw new Error("Order Not Found");
+  }
+});
+
+export {
+  getOrders,
+  addOrderItems,
+  getOrderById,
+  updateOrderTopaid,
+  updateOrderToDelivered,
+  getMyOrders,
+};
