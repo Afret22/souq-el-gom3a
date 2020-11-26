@@ -6,6 +6,7 @@ import Message from "../components/Message";
 import Loader from "../components/Loader";
 import { getUserDetails, updateUserProfile } from "../actions/userActions";
 import { listMyOrders } from "../actions/orderAction";
+import { USER_UPDATE_PROFILE_RESET } from "../constants/userConstants";
 
 const ProfileScreen = ({ location, history }) => {
   const [name, setName] = useState("");
@@ -32,7 +33,10 @@ const ProfileScreen = ({ location, history }) => {
     if (!userInfo) {
       history.push("/login");
     } else {
-      if (!user.name) {
+      if (!user || success || !user.name) {
+        dispatch({
+          type: USER_UPDATE_PROFILE_RESET,
+        });
         dispatch(getUserDetails("profile"));
         dispatch(listMyOrders());
       } else {
@@ -145,7 +149,7 @@ const ProfileScreen = ({ location, history }) => {
                   </td>
                   <td>
                     <LinkContainer to={`/order/${order._id}`}>
-                      <Button  className='btn-sm' variant='light'>
+                      <Button className='btn-sm' variant='light'>
                         Details
                       </Button>
                     </LinkContainer>
