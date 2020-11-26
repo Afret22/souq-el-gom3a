@@ -9,7 +9,8 @@
     "client": "cd frontend && yarn start",
     "dev": "concurrently \"yarn server\" \"yarn client\" ",
     "data:import": "node backend/seeder",
-    "data:destroy": "node backend/seeder -d"
+    "data:destroy": "node backend/seeder -d",
+    "heroku-postbuild":"YARN_CONFIG_PRODUCTION=false cd frontend && yarn && yarn build"
   },
   "repository": "https://github.com/Afret22/souq-el-gom3a.git",
   "author": "afret",
