@@ -22,13 +22,29 @@ import OrderListScreen from "./screens/OrderListScreen";
 const App = () => {
   return (
     <Router>
-      <Header />
+      <Route render={({ history }) => <Header history={history} />} />
       <main className='py-3'>
         <Container>
           <Route path='/' component={HomeScreen} exact />
+          <Route path='/search/:keyword' component={HomeScreen} exact />
+          <Route path='/page/:pageNumber' component={HomeScreen} exact />
+          <Route
+            path='/search/:keyword/page/:pageNumber'
+            component={HomeScreen}
+            exact
+          />
           <Route path='/placeorder' component={PlaceOrderScreen} />
           <Route path='/admin/userlist' component={UsersListScreen} exact />
-          <Route path='/admin/productlist' component={ProductListScreen} />
+          <Route
+            path='/admin/productlist'
+            component={ProductListScreen}
+            exact
+          />
+          <Route
+            path='/admin/productlist/:pageNumber'
+            component={ProductListScreen}
+            exact
+          />
           <Route path='/admin/product/:id/edit' component={ProductEditScreen} />
           <Route path='/admin/userlist/:id/edit' component={UserEditScreen} />
           <Route path='/admin/orderlist' component={OrderListScreen} />
