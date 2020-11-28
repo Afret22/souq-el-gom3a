@@ -47,7 +47,7 @@ const ProductScreen = ({ history, match }) => {
       });
     }
     dispatch(listProductsDetail(match.params.id));
-  }, [dispatch,successReview,match]);
+  }, [dispatch, successReview, match]);
 
   const addToCartHandler = () => {
     history.push(`/cart/${match.params.id}?qty=${qty}`);
@@ -56,7 +56,7 @@ const ProductScreen = ({ history, match }) => {
   const submitHandler = (e) => {
     e.preventDefault();
     dispatch(
-        createProductReview(match.params.id, {
+      createProductReview(match.params.id, {
         rating,
         comment,
       })
@@ -74,7 +74,7 @@ const ProductScreen = ({ history, match }) => {
         <Message variant='danger'>{error}</Message>
       ) : (
         <>
-         <Meta title={product.name}/>
+          <Meta title={product.name} />
 
           <Row>
             <Col md={6}>
@@ -175,7 +175,7 @@ const ProductScreen = ({ history, match }) => {
                           <option value='1'>1 - Poor</option>
                           <option value='2'>2 - Fair</option>
                           <option value='3'>3 - Good</option>
-                          <option value='4'>$- Very Good</option>
+                          <option value='4'>4- Very Good</option>
                           <option value='5'>5- Excellent</option>
                         </Form.Control>
                       </Form.Group>

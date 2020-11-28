@@ -8,6 +8,9 @@ import Product from "../models/productModel.js";
 const getProducts = asyncHandler(async (req, res) => {
   const pageSize = 10;
   const page = Number(req.query.pageNumber) || 1;
+
+  const category = req.query.category;
+
   const keyword = req.query.keyword
     ? {
         name: {
@@ -15,7 +18,12 @@ const getProducts = asyncHandler(async (req, res) => {
           $options: "i",
         },
       }
+    : category
+    ? {
+        category,
+      }
     : {};
+
   const count = await Product.countDocuments({ ...keyword });
   const products = await Product.find({ ...keyword })
     .limit(pageSize)

@@ -11,7 +11,6 @@ import {
   deliverOrder,
 } from "../actions/orderAction";
 import {
-  ORDER_PAY_RESET,
   ORDER_DELIVER_RESET,
   ORDER_DETAILS_RESET,
 } from "../constants/orderConstants";
@@ -37,7 +36,7 @@ const OrderScreen = ({ match,history }) => {
   const orderDeliver = useSelector((state) => state.orderDeliver);
   const { loading: loadingDeliver, success: successDeliver } = orderDeliver;
 
-  if (!loading) {
+  if (!loading && order) {
     //   Calculate prices
     const addDecimals = (num) => {
       return (Math.round(num * 100) / 100).toFixed(2);
@@ -45,7 +44,7 @@ const OrderScreen = ({ match,history }) => {
 
     order.itemsPrice = addDecimals(
       order.orderItems.reduce((acc, item) => acc + item.price * item.qty, 0)
-    );
+    );  
   }
 
   useEffect(() => {
@@ -88,7 +87,7 @@ const OrderScreen = ({ match,history }) => {
     dispatch(deliverOrder(order));
   };
 
-  return loading ? (
+  return !order ? <Loader /> : loading ? (
     <Loader />
   ) : error ? (
     <Message variant='danger'>{error}</Message>

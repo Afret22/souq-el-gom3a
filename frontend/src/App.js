@@ -33,6 +33,16 @@ const App = () => {
             component={HomeScreen}
             exact
           />
+          <Route
+            path='/category/:category'
+            component={HomeScreen}
+            exact
+          />
+          <Route
+            path='/category/:category/page/:pageNumber'
+            component={HomeScreen}
+            exact
+          />
           <Route path='/placeorder' component={PlaceOrderScreen} />
           <Route path='/admin/userlist' component={UsersListScreen} exact />
           <Route

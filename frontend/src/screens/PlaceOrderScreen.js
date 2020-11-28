@@ -6,6 +6,7 @@ import Message from "../components/Message";
 import CheckoutSteps from "../components/CheckoutSteps";
 import { createOrder } from "../actions/orderAction";
 import { ClearCart } from "../actions/cartActions";
+import { ORDER_DETAILS_RESET } from "../constants/orderConstants";
 
 const PlaceOrderScreen = ({ history }) => {
   const dispatch = useDispatch();
@@ -53,6 +54,10 @@ const PlaceOrderScreen = ({ history }) => {
     );
     setSuccess(true);
     dispatch(ClearCart())
+    dispatch({
+        type:
+        ORDER_DETAILS_RESET,
+    })
   };
 
   return (
