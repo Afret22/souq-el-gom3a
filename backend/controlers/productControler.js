@@ -156,6 +156,36 @@ const createProductReview = asyncHandler(async (req, res) => {
   }
 });
 
+// @desc    Edit  a review
+// @route   PUT /api/products/:id/reviews
+// @access  Private
+
+const editProductReview = asyncHandler(async (req, res) => {
+  const { rating, comment } = req.body;
+
+  const product = await Product.findById(req.params.id);
+
+  if (product) {
+    const alreadyReviewed = product.reviews.find(
+      (r) => r.user.toString() === req.user._id.toString()
+    );
+    if (alreadyReviewed) {
+      alreadyReviewed.rating = Number(rating);
+      alreadyReviewed.comment = comment;
+
+      await product.save();
+
+      res.status(201).json({ messages: "Review Edited" });
+    } else {
+      res.status(400);
+      throw new Error("Review Not Found");
+    }
+  } else {
+    res.status(404);
+    throw new Error("Product Not Found");
+  }
+});
+
 // @desc    Get top rated products
 // @route   GET /api/products/top
 // @access  Public
@@ -173,4 +203,5 @@ export {
   createProduct,
   createProductReview,
   getTopProducts,
+  editProductReview,
 };

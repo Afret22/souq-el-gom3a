@@ -1,20 +1,32 @@
-import React from "react";
-import {Route} from "react-router-dom";
+import React, { useEffect } from "react";
+import { Route } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { Container, Nav, Navbar, NavDropdown } from "react-bootstrap";
 import { LinkContainer } from "react-router-bootstrap";
 import { logout } from "../actions/userActions";
+import {productsCategories} from "../actions/productActions";
 import SearchBox from "./SearchBox";
 
-const Header = ({history}) => {
+const Header = ({ history }) => {
   const dispatch = useDispatch();
+
+  let categories = [];
 
   const userLogin = useSelector((state) => state.userLogin);
   const { userInfo } = userLogin;
 
+  const productsCategorie = useSelector((state) => state.productsCategories);
+  const { products } = productsCategorie;
+
+  useEffect(() => {
+    dispatch(productsCategories());
+
+    
+  }, [dispatch]);
+
   const logoutHandler = () => {
     dispatch(logout());
-    history.push('/');
+    history.push("/");
   };
   return (
     <header>
@@ -25,7 +37,7 @@ const Header = ({history}) => {
           </LinkContainer>
           <Navbar.Toggle aria-controls='basic-navbar-nav' />
           <Navbar.Collapse id='basic-navbar-nav'>
-          <Route render={({history})=> <SearchBox history={history} /> }/>
+            <Route render={({ history }) => <SearchBox history={history} />} />
             <Nav className='ml-auto'>
               <LinkContainer to='/cart'>
                 <Nav.Link>
@@ -59,6 +71,15 @@ const Header = ({history}) => {
                   <LinkContainer to='/admin/orderlist'>
                     <NavDropdown.Item>Orders</NavDropdown.Item>
                   </LinkContainer>
+                </NavDropdown>
+              )}
+              {userInfo && !userInfo.isAdmin && (
+                <NavDropdown title='categories' id='categoriesmenu'>
+                  {products.map((product) => (
+                    <LinkContainer to={`/category/${product.category}`}>
+                      <NavDropdown.Item>{product.category}</NavDropdown.Item>
+                    </LinkContainer>
+                  ))}
                 </NavDropdown>
               )}
             </Nav>

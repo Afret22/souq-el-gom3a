@@ -20,6 +20,12 @@ import {
   PRODUCT_TOP_REQUEST,
   PRODUCT_TOP_SUCCESS,
   PRODUCT_TOP_FAIL,
+  PRODUCT_CATEGORY_REQUEST,
+  PRODUCT_CATEGORY_SUCCESS,
+  PRODUCT_CATEGORY_FAIL,
+  PRODUCT_EDIT_REVIEW_REQUEST,
+  PRODUCT_EDIT_REVIEW_SUCCESS,
+  PRODUCT_EDIT_REVIEW_FAIL,
 } from "../constants/productConstants";
 import axios from "axios";
 
@@ -50,6 +56,28 @@ export const listProducts = (
   } catch (error) {
     dispatch({
       type: PRODUCT_LIST_FAIL,
+      payload:
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message,
+    });
+  }
+};
+
+export const productsCategories = () => async (dispatch) => {
+  try {
+    dispatch({
+      type: PRODUCT_CATEGORY_REQUEST,
+    });
+    const { data } = await axios.get(`/api/products`);
+
+    dispatch({
+      type: PRODUCT_CATEGORY_SUCCESS,
+      payload: data,
+    });
+  } catch (error) {
+    dispatch({
+      type: PRODUCT_CATEGORY_FAIL,
       payload:
         error.response && error.response.data.message
           ? error.response.data.message
@@ -216,6 +244,42 @@ export const createProductReview = (productId, review) => async (
     });
   }
 };
+
+export const editProductReview = (productId, review) => async (
+    dispatch,
+    getState
+  ) => {
+    try {
+      dispatch({
+        type: PRODUCT_EDIT_REVIEW_REQUEST,
+      });
+  
+      const {
+        userLogin: { userInfo },
+      } = getState();
+  
+      const config = {
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${userInfo.token}`,
+        },
+      };
+  
+      await axios.put(`/api/products/${productId}/reviews`, review, config);
+  
+      dispatch({
+        type: PRODUCT_EDIT_REVIEW_SUCCESS,
+      });
+    } catch (error) {
+      dispatch({
+        type: PRODUCT_EDIT_REVIEW_FAIL,
+        payload:
+          error.response && error.response.data.message
+            ? error.response.data.message
+            : error.message,
+      });
+    }
+  };
 
 export const listTopProducts = () => async (dispatch) => {
   try {

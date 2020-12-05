@@ -9,14 +9,12 @@ import Loader from "../components/Loader";
 import Pageinate from "../components/Pageinate";
 import ProductCarousel from "../components/ProductsCarousel";
 import Meta from "../components/Meta";
-import CategorySteps from "../components/CategorySteps";
 
 const HomeScreen = ({ match }) => {
   const keyword = match.params.keyword;
 
   const category = match.params.category;
 
-  let categories=[]
 
   const pageNumber = match.params.pageNumber || 1;
 
@@ -29,12 +27,11 @@ const HomeScreen = ({ match }) => {
     dispatch(listProducts(keyword, pageNumber, category));
 
     
-  }, [dispatch, pageNumber, keyword]);
+  }, [dispatch, pageNumber, keyword,category]);
 
   return (
     <>
       <Meta />
-      {!category && !keyword && <CategorySteps categories={categories} />}
       {!keyword && !category && <ProductCarousel />}
       <h1> Latest Products</h1>
       {keyword || category ? (
@@ -51,7 +48,6 @@ const HomeScreen = ({ match }) => {
         <>
           <Row>
             {products.map((product) => {
-                categories.push(product.category)
                 return(
               <Col key={product._id} sm={12} md={6} lg={4} xl={3}>
                 <Product product={product} />
